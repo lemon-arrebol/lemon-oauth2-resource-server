@@ -1,0 +1,62 @@
+lemon:
+  oauth2:
+    jwt:
+      keystorePath: classpath:jwt/keystore.jks
+      #      keystorePassword: mypass
+      keystorePassword: '{ENC}oxy3zSD6rNpqlTByMsxOcQ=='
+      keystoreAlias: mytest
+      publicKeyPath: classpath:jwt/publicKey.txt
+      privateKeyPath: classpath:jwt/privateKey.txt
+    token:
+      format: jwt
+
+jasypt:
+  encryptor:
+    property:
+      prefix: '{ENC}'
+      suffix: ''
+    password: qwertyuiop
+    algorithm: PBEWithMD5AndDES
+
+server:
+  port: 8081
+  host: localhost
+
+logging:
+  level:
+    com.lemon: debug
+    org.springframework.security.oauth2: DEBUG
+    org.springframework.web.client: DEBUG
+
+security:
+  oauth2:
+    # SsoSecurityConfigurer OAuth2SsoProperties 默认是/login
+    sso: /loginAAA
+
+    # AuthorizationServerTokenServicesConfiguration AuthorizationServerProperties
+    authorization:
+      check-token-access: http://localhost:8080/oauth/check_token
+
+    # ResourceServerTokenServicesConfiguration ResourceServerProperties
+    resource:
+      # 最后的通过访问令牌访问受保护资源后，在当前服务创建认证后凭证Authentication（登录态）也可以不通过访问userInfoUri实现，
+      # userInfoUri端点是需要用户自己实现。默认情况security.oauth2.resource.preferTokenInfo=true ，
+      # 获取用户信息使用的是授权服务器的/check_token端点，即TokenInfo，根据访问令牌找到在授权服务器关联的授予这个访问令牌的用户信息
+      # 用户信息资源地址
+      user-info-uri: http://localhost:8080/auth/me
+      # 配置check-token的url地址
+      token-info-uri: http://localhost:8080/oauth/check_token
+      # 如果上面两个都配置了，true 优先使用token-info-uri
+      prefer-token-info: true
+
+    # OAuth2AutoConfiguration OAuth2ClientProperties
+    client:
+      #      scope: all
+      #      grant-type: authorization_code
+      client-id: client_1
+      #      client-secret: 123456
+      client-secret: '{ENC}Cd5QbAZ1VUIxAzxVlQHAlA=='
+#      # 从认证授权中心上验证token
+#      access-token-uri: http://localhost:8080/oauth/token22
+#      # 跳转到认证授权中心获取授权码
+#      user-authorization-uri: http://localhost:8080/oauth/authorize33
