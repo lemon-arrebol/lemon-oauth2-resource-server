@@ -39,10 +39,6 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
     @Qualifier("customOAuth2AuthenticationManager")
     private AuthenticationManager authenticationManager;
 
-//    @Autowired
-//    @Qualifier("customOAuth2ClientAuthenticationProcessingFilter")
-//    private AbstractAuthenticationProcessingFilter customOAuth2ClientAuthenticationProcessingFilter;
-
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
@@ -64,20 +60,12 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-//        this.customOAuth2ClientAuthenticationProcessingFilter.setSessionAuthenticationStrategy(http.getSharedObject(SessionAuthenticationStrategy.class));
-//        CustomOAuth2AuthenticationProcessingFilter customOAuth2AuthenticationProcessingFilter = new CustomOAuth2AuthenticationProcessingFilter();
-//        customOAuth2AuthenticationProcessingFilter.setAuthenticationManager(this.authenticationManager);
-
         http
-//                .addFilterBefore(this.customOAuth2ClientAuthenticationProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
-//                .addFilterAfter(customOAuth2AuthenticationProcessingFilter, AbstractPreAuthenticatedProcessingFilter.class)
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .and()
                 // 请求权限配置
                 .authorizeRequests()
-                // 下边的路径放行,不需要经过认证
-//                .antMatchers("/auth/user/login").permitAll()
                 // OPTIONS请求不需要鉴权
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // 用户的增删改接口只允许管理员访问
